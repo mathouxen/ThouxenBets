@@ -1,5 +1,7 @@
 # Thouxen Bets ⚽
 
+Project verification code: WTC-3QYT9PFR
+
 A Python-based football match prediction project that uses historical match data to predict the **directional outcome** of future football matches:
 
 - 🏠 Home win
