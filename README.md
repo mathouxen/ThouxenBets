@@ -1,93 +1,360 @@
-# Thouxen Bets
+# Thouxen Bets ⚽
 
+A Python-based football match prediction project that uses historical match data to predict the **directional outcome** of future football matches:
 
+- 🏠 Home win
+- 🤝 Draw
+- ✈️ Away win
 
-## Getting started
+The project starts with a simple, interpretable approach rather than immediately using complex machine-learning models. The goal is to build the predictor incrementally, test each improvement, and measure whether it actually improves prediction accuracy.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+---
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## 🎯 Project Goal
 
-## Add your files
+The current goal of Thouxen Bets is **directional accuracy**.
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+The MVP asks:
 
+> Given the information available before a match, can we correctly predict whether the home team will win, the match will be a draw, or the away team will win?
+
+The project is **not currently focused on**:
+
+- Exact score prediction
+- Betting odds
+- Stake sizing
+- Betting strategies
+- Maximising financial returns
+
+Those may become future areas of exploration, but the current focus is simply building and evaluating a football outcome predictor.
+
+---
+
+## 🧠 How the MVP Works
+
+The current predictor uses several basic indicators of team performance.
+
+### 1. Recent Form
+
+The model looks at a team's recent matches and records each result as:
+
+```text
+W = Win
+D = Draw
+L = Loss
 ```
-cd existing_repo
-git remote add origin https://gitlab.wethinkco.de/kamarjhb025/thouxen-bets.git
-git branch -M main
-git push -uf origin main
+
+Form is converted into points:
+
+```text
+Win  = 3 points
+Draw = 1 point
+Loss = 0 points
 ```
 
-## Integrate with your tools
+For example:
 
-- [ ] [Set up project integrations](https://gitlab.wethinkco.de/kamarjhb025/thouxen-bets/-/settings/integrations)
+```text
+W W D L W
+```
 
-## Collaborate with your team
+produces:
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+```text
+3 + 3 + 1 + 0 + 3 = 10 points
+```
 
-## Test and Deploy
+---
 
-Use the built-in continuous integration in GitLab.
+### 2. Goals Scored
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+The model records the number of goals a team scored in its recent matches.
 
-***
+This provides a simple measure of attacking performance.
 
-# Editing this README
+---
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+### 3. Goals Conceded
 
-## Suggestions for a good README
+The model also records the number of goals a team conceded in its recent matches.
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+This provides a simple measure of defensive performance.
 
-## Name
-Choose a self-explaining name for your project.
+---
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+### 4. Team Strength
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+The recent form, goals scored and goals conceded are combined into a basic team-strength value.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+The two teams are then compared:
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+```text
+delta = home_strength - away_strength
+```
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+The current prediction logic is:
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+```text
+delta > 0  → Home win
+delta < 0  → Away win
+delta = 0  → Draw
+```
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+This gives the MVP a simple and interpretable prediction mechanism.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+---
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+## ⏱️ Time-Aware Predictions
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+A key requirement of the project is that the model must not use information from the future.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+When predicting a match, the model should only use matches that occurred **before the match being predicted**.
 
-## License
-For open source projects, say how it is licensed.
+For example:
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+```text
+Match 1
+Match 2
+Match 3
+...
+Match 19
+Match 20 ← prediction
+Match 21
+...
+```
+
+When predicting Match 20, the model can use Matches 1–19, but must not use Matches 21 onward.
+
+The `stats()` function therefore works backwards from the current match index to collect historical information.
+
+This prevents **data leakage** and makes the evaluation more representative of how the model would behave in practice.
+
+---
+
+## 📊 Data Format
+
+The current dataset is stored chronologically.
+
+Relevant row indexes are:
+
+|    Index | Data         |
+| -------: | ------------ |
+| `row[3]` | Home team    |
+| `row[4]` | Away team    |
+| `row[5]` | Home goals   |
+| `row[6]` | Away goals   |
+| `row[7]` | Match result |
+
+The result is represented as:
+
+```text
+H = Home win
+D = Draw
+A = Away win
+```
+
+The project currently uses Python and CSV-based football data.
+
+---
+
+## 🧩 Current Core Functions
+
+### `stats(home, away, indexed)`
+
+Collects historical statistics for both teams before the match at `indexed`.
+
+It currently gathers:
+
+- Goals scored
+- Goals conceded
+- Recent form
+
+The function works backwards through previous matches and is the **time-aware version used by the MVP**.
+
+---
+
+### `stats2(...)`
+
+Processes the collected goal data and calculates averages.
+
+It also handles cases where a team has insufficient historical data.
+
+---
+
+### `form_score(home_recent_form, away_recent_form)`
+
+Converts recent form into numerical points:
+
+```text
+Win  → 3
+Draw → 1
+Loss → 0
+```
+
+---
+
+### `teamStrength2(...)`
+
+Combines the team's recent form and goal statistics to produce:
+
+```text
+home_strength
+away_strength
+delta
+```
+
+The delta is then used by the prediction logic.
+
+---
+
+## 🧪 Evaluation
+
+The MVP evaluates predictions against the actual match result.
+
+The current evaluation is intentionally strict.
+
+A prediction is considered correct when:
+
+```text
+delta > 0  AND actual result = H
+```
+
+or:
+
+```text
+delta < 0  AND actual result = A
+```
+
+or:
+
+```text
+delta == 0 AND actual result = D
+```
+
+A draw is therefore only predicted when the two calculated strengths are exactly equal.
+
+This is an area that may be improved later.
+
+---
+
+## 🔍 Current Findings
+
+Testing the basic team-strength model revealed an interesting pattern.
+
+A significant proportion of incorrect predictions were:
+
+> The home team won, while the model favoured the away team.
+
+This suggests that the current model may be missing an important factor:
+
+### Home-ground advantage
+
+The project will eventually investigate whether incorporating an empirically measured home advantage improves prediction accuracy.
+
+The important principle is that this will be **tested rather than assumed**.
+
+---
+
+## 🛠️ Current Development Status
+
+The project recently underwent a major code restructuring.
+
+The original MVP was becoming difficult to read and reuse because too much functionality was concentrated in the same areas.
+
+The code has therefore been reorganised into smaller functions with clearer responsibilities.
+
+### Current status
+
+- ✅ Core MVP implemented
+- ✅ Historical statistics collection
+- ✅ Time-aware statistics
+- ✅ Recent-form calculation
+- ✅ Goal statistics
+- ✅ Basic team-strength calculation
+- ✅ Prediction evaluation
+- ✅ Major code restructuring
+- 🔧 Minor refactoring still remaining
+- ⏳ Home-advantage investigation
+- ⏳ Improved draw handling
+- ⏳ Further model evaluation
+
+---
+
+## 🗺️ Future Development
+
+The project is intended to evolve incrementally.
+
+Potential improvements include:
+
+### Home Advantage
+
+Calculate an empirical home advantage from historical results and determine whether adding it improves predictions.
+
+### Better Draw Handling
+
+The current system only predicts a draw when:
+
+```text
+delta == 0
+```
+
+A future version could use a more flexible method for estimating draw probability.
+
+### Home/Away Performance
+
+Instead of treating all recent matches equally, the model could investigate:
+
+- Home team's home performance
+- Away team's away performance
+- How strongly venue affects each team
+
+### Improved Team Strength
+
+Additional factors can eventually be introduced if testing shows that they provide useful predictive information.
+
+### More Advanced Models
+
+Once the simple MVP has been properly evaluated, the project could experiment with statistical or machine-learning approaches.
+
+The simple model provides a useful baseline against which more complicated models can be compared.
+
+---
+
+## 📁 Project Philosophy
+
+Thouxen Bets follows a simple development philosophy:
+
+> **Start simple → measure → identify weaknesses → improve → measure again.**
+
+The intention is not to build a complicated model immediately.
+
+Instead, each new feature should answer a question:
+
+1. What weakness does this feature address?
+2. Can we measure the feature using historical data?
+3. Does adding it improve prediction performance?
+4. Is the improvement worth the additional complexity?
+
+This keeps the project understandable and makes it easier to determine which parts of the model actually contribute value.
+
+---
+
+## 🚀 Long-Term Vision
+
+The long-term goal is to develop Thouxen Bets from a simple rule-based MVP into a more capable football prediction system while maintaining a strong emphasis on:
+
+- Clean and reusable code
+- Time-aware data
+- Reliable evaluation
+- Measurable improvements
+- Understanding why the model makes its predictions
+
+The MVP is the foundation for that process.
+
+---
+
+## ⚠️ Disclaimer
+
+Thouxen Bets is a software and data-analysis project for experimentation and learning.
+
+Football predictions are inherently uncertain, and historical performance does not guarantee future results.
