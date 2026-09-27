@@ -9,4 +9,4 @@ def home_away_advantage(home, away, indexed):
     home_home_form, away_away_form = feat.home_away_run(home, away, indexed)
 
 
-    
+   

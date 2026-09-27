@@ -2,7 +2,7 @@ import sys
 import csv
 
 
-with open('../data/E0.csv', newline="") as csvfile:
+with open('data/E0.csv', newline="") as csvfile:
     reader = csv.reader(csvfile, )
 
     rows = list(reader)

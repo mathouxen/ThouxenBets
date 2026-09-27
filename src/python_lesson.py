@@ -11,15 +11,16 @@ def adding(num1, num2):
 
 
 
+        
 
 
 
 
 
 
-sum = 1 + 4
+# sum = 1 + 4
 
-if sum % 2 == 0:
-    print("Even")
-else:
-    print("Odd")
+# if sum % 2 == 0:
+#     print("Even")
+# else:
+#     print("Odd")
