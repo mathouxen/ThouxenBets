@@ -3,16 +3,16 @@ import json
 import urllib.request
 
 # Configuration
-API_KEY = "YOUR_API_FOOTBALL_KEY"
+API_KEY = "8c5caa0c4b62bbcf9b7298292ba7e41e"
 LEAGUE_ID = "39"  # Premier League in API-Football
-SEASONS_TO_FETCH = ["2024", "2025", "2026"]  # Add seasons needed
-CSV_FILENAME = "E0.csv"
+SEASONS_TO_FETCH = ["2024", "2025", "2026"]  # seasons needed
+CSV_FILENAME = "data/premier_league_matches.csv"
 
-# Open the CSV file in append mode ('a')
+
 csv_file = open(CSV_FILENAME, mode="a", newline="", encoding="utf-8")
 writer = csv.writer(csv_file)
 
-# Loop through each missing season
+
 for season in SEASONS_TO_FETCH:
     url = (
         "https://v3.football.api-sports.io/fixtures?league="
@@ -42,7 +42,7 @@ for season in SEASONS_TO_FETCH:
         away_goals = goals_info.get("away")
         status = fixture_info.get("status", {}).get("short")
 
-        # Create a row matching your existing CSV schema
+        # Order row to match the format of the csv file
         row = [season, date, home_team, away_team, home_goals, away_goals, status]
         writer.writerow(row)
 
