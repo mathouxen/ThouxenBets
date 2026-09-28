@@ -12,10 +12,53 @@ request.add_header("X-Auth-Token", api_token)
 response = urllib.request.urlopen(request)
 data = json.loads(response.read().decode("utf-8"))
 
-print(json.dumps(data, indent=4))
+raw_api_file_path = "raw_api_data.json"
+
+with open(raw_api_file_path, "w", encoding="utf-8") as raw_json_file:
+    json.dump(data, raw_json_file, indent=4)
 
 
+team_mapping = {
+    "Wolverhampton": "Wolves",
+    "Wolverhampton Wanderers FC": "Wolves",
+    "Newcastle": "Newcastle",
+    "Newcastle United FC": "Newcastle",
+    "West Ham": "West Ham",
+    "West Ham United FC": "West Ham",
+    "Fulham": "Fulham",
+    "Fulham FC": "Fulham",
+    "Man United": "Man United",
+    "Manchester United FC": "Man United",
+    "Man City": "Man City",
+    "Manchester City FC": "Man City",
+    "Tottenham": "Tottenham",
+    "Tottenham Hotspur FC": "Tottenham",
+    "Nottingham": "Nott'm Forest",
+    "Nottingham Forest FC": "Nott'm Forest",
+    "Brighton Hove": "Brighton",
+    "Brighton & Hove Albion FC": "Brighton",
+    "Arsenal": "Arsenal",
+    "Aston Villa": "Aston Villa",
+    "Bournemouth": "Bournemouth",
+    "Brentford": "Brentford",
+    "Chelsea": "Chelsea",
+    "Crystal Palace": "Crystal Palace",
+    "Everton": "Everton",
+    "Ipswich": "Ipswich",
+    "Leicester": "Leicester",
+    "Liverpool": "Liverpool",
+    "Southampton": "Southampton"
+}
 
+with open(json_file_path, "r", encoding="utf-8") as json_input:
+    raw_data = json.load(json_input)
+
+matches = raw_data.get("matches", [])
+
+matches_added = 0
+
+with open(csv_file_path, "a", newline="", encoding="utf-8") as csv_output:
+    writer = csv.writer(csv_output)
 
 # import csv
 # import json
