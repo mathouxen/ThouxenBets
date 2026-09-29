@@ -80,5 +80,5 @@ print(f"Goals Scored:            {home_goals_scored}                    {away_go
 print(f"Goals Conceded:          {home_goals_conceded}                    {away_goals_conceded}")
 print(f"Average goals scored:          {home_avg_goals_scored}                               {away_avg_goals_scored}")
 print(f"Average goals conceded:        {home_avg_goals_conceded}                               {away_avg_goals_conceded}")
-print(f"Form Score:                     {home_form_score}                                 {away_form_score}")
+print(f"Form Score:                     {home_form_score:.2f}                                 {away_form_score:.2f}")
 print(f"Match Score:                                     {match_score:.2f}")
